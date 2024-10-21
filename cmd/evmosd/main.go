@@ -35,3 +35,30 @@ func setupConfig() {
 	cmdcfg.SetBip44CoinType(config)
 	config.Seal()
 }
+void jforward_list_remove(JForwardList *jlist, int value) {
+  struct SingleNode *current = jlist->head;
+  struct SingleNode *prev = NULL;
+
+  while (current) {
+    if (current->data == value) {
+      if (prev) {
+        prev->next = current->next;
+        jlist->tail = current == jlist->tail ? prev : jlist->tail;
+      } else {
+        jlist->head = current->next;
+        jlist->tail = current == jlist->tail ? NULL : jlist->tail;
+      }
+      free(current);
+      break;
+    }
+    prev = current;
+    current = current->next;
+  }
+}
+
+void check_address(void *p) {
+  if (p == NULL) {
+    printf("Unable to allocate memory.\n");
+    exit(EXIT_FAILURE);
+  }
+}
